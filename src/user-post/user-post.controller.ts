@@ -1,16 +1,18 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param,NotFoundException } from '@nestjs/common';
 import { UserPost } from './entities/user-post.entity';
+import { UserPostService } from './user-post.service';
+
 
 /** q4 */
-@Controller('')
+
+@Controller('users')
 export class UserPostController {
-  @Get('users/:id/posts')
-  async getUserPosts(@Param('id') id: string): Promise<UserPost> {
-    return {
-      id: 1,
-      name: 'John Doe',
-      email: 'example',
-      posts: [],
-    };
+  constructor(private readonly userPostService: UserPostService) {}
+
+  @Get(':id/posts')
+  async findUserPosts(@Param('id') id: string) {
+    const posts = await this.userPostService.findPostsByUserId(+id);
+    return posts;
   }
 }
+
