@@ -1,6 +1,3 @@
-
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import {
     Controller,
     Get,
@@ -9,9 +6,11 @@ import {
     Patch,
     Param,
     Delete,
+    Put,
   } from '@nestjs/common';
   import { PostService } from './post.service';
-
+  import { CreatePostDto } from './dto/create-post.dto';
+  import { UpdatePostDto } from './dto/update-post.dto';
   
   @Controller('posts')
   export class PostController {
@@ -32,9 +31,11 @@ import {
       return this.PostService.findOne(+id);
     }
   
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() UpdatePostDto: UpdatePostDto) {
-      return this.PostService.update(+id, UpdatePostDto);
+    @Put(':id')
+    async update(@Param('id') id: Number, @Body() updatePostDto: UpdatePostDto) {
+      const test_title = await this.PostService.update(+id, updatePostDto);
+      console.log(test_title);
+      return test_title;
     }
   
     @Delete(':id')
